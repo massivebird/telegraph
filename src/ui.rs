@@ -2,7 +2,7 @@ use crate::app::App;
 use ratatui::{Frame, layout::Rect, text::Text, widgets::Block};
 
 pub fn ui(f: &mut Frame, app: &App) {
-    let block = Block::bordered().title_top(" Telegraph ");
+    let block = Block::bordered().title_top(" Telegraph ").title_bottom(" Space: send morse | c: Change case | l: Clear output ");
 
     f.render_widget(block, Rect::new(0, 0, f.area().width, f.area().height));
 
@@ -29,6 +29,9 @@ pub fn ui(f: &mut Frame, app: &App) {
     let signals = Text::from(format!("{:?}", app.signals));
     f.render_widget(signals, Rect::new(1, 3, f.area().width, f.area().height));
 
-    let buf = Text::from(app.buf.clone());
+    let buf = Text::from(match app.render_case {
+        crate::app::RenderCase::Lowercase => app.buf.clone().to_lowercase(),
+        crate::app::RenderCase::Uppercase => app.buf.clone().to_uppercase(),
+    });
     f.render_widget(buf, Rect::new(1, 4, f.area().width, f.area().height));
 }

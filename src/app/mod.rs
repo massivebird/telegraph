@@ -13,15 +13,35 @@ pub struct App {
     pub staged_signal: Option<Signal>,
     pub signals: Vec<Signal>,
 
+    pub render_case: RenderCase,
+
     pub buf: String,
 
     /// Indicates if the user has begun quitting the app.
     is_closing: bool,
 }
 
+#[derive(Copy, Clone, Debug, Default)]
+pub enum RenderCase {
+    #[default]
+    Lowercase,
+    Uppercase,
+}
+
 impl App {
     fn update_latest(&mut self) {
         self.latest_event = Some(std::time::Instant::now());
+    }
+
+    pub fn clear(&mut self) {
+        self.buf.clear();
+    }
+
+    pub const fn cycle_render_case(&mut self) {
+        self.render_case = match self.render_case {
+            RenderCase::Lowercase => RenderCase::Uppercase,
+            RenderCase::Uppercase => RenderCase::Lowercase,
+        }
     }
 
     pub fn try_push_char(&mut self) {
