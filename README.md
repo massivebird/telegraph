@@ -1,5 +1,9 @@
 # Telegraph
 
+<p align="center">
+  <img width="75%" src="./res/demo.gif" />
+</p>
+
 A CLI for practicing morse code!
 
 Written in Rust 🦀
