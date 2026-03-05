@@ -34,6 +34,16 @@ pub fn signals_to_char(signals: &[Signal]) -> Option<char> {
         [Dash, Dot, Dot, Dash] => Some('x'),
         [Dash, Dot, Dash, Dash] => Some('y'),
         [Dash, Dash, Dot, Dot] => Some('z'),
+        [Dot, Dash, Dash, Dash, Dash] => Some('1'),
+        [Dot, Dot, Dash, Dash, Dash] => Some('2'),
+        [Dot, Dot, Dot, Dash, Dash] => Some('3'),
+        [Dot, Dot, Dot, Dot, Dash] => Some('4'),
+        [Dot, Dot, Dot, Dot, Dot] => Some('5'),
+        [Dash, Dot, Dot, Dot, Dot] => Some('6'),
+        [Dash, Dash, Dot, Dot, Dot] => Some('7'),
+        [Dash, Dash, Dash, Dot, Dot] => Some('8'),
+        [Dash, Dash, Dash, Dash, Dot] => Some('9'),
+        [Dash, Dash, Dash, Dash, Dash] => Some('0'),
         _ => None,
     }
 }
