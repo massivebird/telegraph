@@ -68,7 +68,7 @@ fn start_app<B: Backend>(
         if crossterm::event::poll(timeout)? {
             handle_events(app)?;
         } else if app.pressed_begin.is_some() {
-            app.update_signal();
+            app.press();
         } else {
             app.try_push_char();
         }
@@ -86,10 +86,6 @@ fn start_app<B: Backend>(
 /// Handles user input.
 fn handle_events(app: &mut App) -> io::Result<()> {
     if let Event::Key(key) = event::read()? {
-        if key.code != KeyCode::Char(' ') && app.pressed_begin.is_none() {
-            app.try_push_char();
-        }
-
         if key.code == KeyCode::Char(' ') && key.kind == KeyEventKind::Release {
             app.release();
             return Ok(());

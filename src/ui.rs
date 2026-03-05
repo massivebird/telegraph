@@ -10,8 +10,15 @@ pub fn ui(f: &mut Frame, app: &App) {
     f.render_widget(text, Rect::new(1, 1, f.area().width, f.area().height));
 
     let latest = Text::from(
+        app.latest_event
+            .map(|i| format!("latest event: {}", i.elapsed().as_millis().to_string()))
+            .unwrap_or(String::new()),
+    );
+    f.render_widget(latest, Rect::new(15, 1, f.area().width, f.area().height));
+
+    let latest = Text::from(
         app.pressed_begin
-            .map(|i| i.elapsed().as_millis().to_string())
+            .map(|i| format!("pressed elapsed: {}", i.elapsed().as_millis().to_string()))
             .unwrap_or(String::new()),
     );
     f.render_widget(latest, Rect::new(15, 2, f.area().width, f.area().height));
