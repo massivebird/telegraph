@@ -2,7 +2,7 @@ use crate::app::App;
 use ratatui::{Frame, layout::Rect, text::Text, widgets::Block};
 
 pub fn ui(f: &mut Frame, app: &App) {
-    let block = Block::bordered().title_top(" Morse ");
+    let block = Block::bordered().title_top(" Telegraph ");
 
     f.render_widget(block, Rect::new(0, 0, f.area().width, f.area().height));
 
