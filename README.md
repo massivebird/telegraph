@@ -5,9 +5,11 @@
 </p>
 
 <div align="center">
+
   <!-- <a href="">![](https://img.shields.io/github/v/release/massivebird/lantern)</a> -->
   <a href="">![](https://img.shields.io/github/actions/workflow/status/massivebird/telegraph/rust.yml)</a>
   <a href="">![](https://img.shields.io/badge/Built_With-Ratatui-000?logo=ratatui&logoColor=fff&labelColor=000&color=fff)</a>
+
 </div>
 
 TUI for practicing morse code!
