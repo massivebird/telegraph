@@ -78,6 +78,23 @@ impl App {
 
         let signals = std::mem::take(&mut self.signals);
 
+        // Process some prosigns.
+        // https://en.wikipedia.org/wiki/Prosigns_for_Morse_code
+        {
+            use Signal::{Dash, Dot};
+            match &signals[..] {
+                [Dot, Dot, Dot, Dot, Dot, Dot, Dot, Dot] => {
+                    let _ = self.buf.pop();
+                    return;
+                }
+                [Dot, Dot, Dot, Dot, Dot, Dot, Dot, Dot, Dot, Dash, Dot, Dash] => {
+                    self.clear();
+                    return;
+                }
+                _ => (),
+            }
+        }
+
         self.latest_char = Some(signals.clone());
 
         let Some(c) = signals_to_char(&signals).map(|c| self.apply_case(c)) else {
