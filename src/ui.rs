@@ -11,13 +11,13 @@ pub fn ui(f: &mut Frame, app: &App) {
 
     f.render_widget(block, Rect::new(0, 0, f.area().width, f.area().height));
 
-    render_input(f, app);
-
     let buf = Text::from(match app.render_case {
         crate::app::RenderCase::Lowercase => app.buf.clone().to_lowercase(),
         crate::app::RenderCase::Uppercase => app.buf.clone().to_uppercase(),
     });
-    f.render_widget(buf, Rect::new(1, 4, f.area().width, f.area().height));
+    f.render_widget(buf, Rect::new(2, f.area().height - 6, f.area().width - 4, f.area().height));
+
+    render_input(f, app);
 
     if app.show_debug {
         render_debug(f, app);
