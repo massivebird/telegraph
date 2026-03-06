@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use self::cli::generate_matches;
 use self::signal::{Signal, signals_to_char};
 
@@ -67,7 +69,7 @@ impl App {
             || self.signals.is_empty()
             || self
                 .latest_event
-                .is_none_or(|i| i.elapsed() < std::time::Duration::from_millis(500))
+                .is_none_or(|i| i.elapsed() < Duration::from_millis(500))
         {
             return;
         }
@@ -110,7 +112,7 @@ impl App {
             return;
         };
 
-        if init.elapsed() > std::time::Duration::from_millis(101) {
+        if init.elapsed() > Duration::from_millis(180) {
             self.staged_signal = Some(Signal::Dash);
         } else {
             self.staged_signal = Some(Signal::Dot);
