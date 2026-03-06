@@ -17,6 +17,8 @@ pub struct App {
 
     pub buf: String,
 
+    pub latest_char: Option<(Vec<Signal>, Option<char>)>,
+
     pub show_debug: bool,
 
     /// Indicates if the user has begun quitting the app.
@@ -57,9 +59,11 @@ impl App {
         }
 
         let signals = std::mem::take(&mut self.signals);
-        let c = signals_to_char(&signals).unwrap_or('?');
+        let c = signals_to_char(&signals);
 
-        self.buf.push(c);
+        self.latest_char = Some((signals.clone(), c));
+
+        self.buf.push(c.unwrap_or('?'));
 
         self.latest_event = None;
     }
