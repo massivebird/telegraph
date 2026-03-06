@@ -7,12 +7,15 @@ use ratatui::{Frame, layout::Rect, text::Text, widgets::Block};
 pub fn ui(f: &mut Frame, app: &App) {
     let block = Block::bordered()
         .title_top(" Telegraph ")
-        .title_bottom(" Space: send morse | c: Change case | l: Clear output ");
+        .title_bottom(" Space: send morse | c: Change case | L: Clear output ");
 
     f.render_widget(block, Rect::new(0, 0, f.area().width, f.area().height));
 
     let buf = Text::from(app.buf.clone());
-    f.render_widget(buf, Rect::new(2, f.area().height - 6, f.area().width - 4, f.area().height));
+    f.render_widget(
+        buf,
+        Rect::new(2, f.area().height - 6, f.area().width - 4, f.area().height),
+    );
 
     render_input(f, app);
 
@@ -108,7 +111,4 @@ fn render_debug(f: &mut Frame, app: &App) {
         symbol,
         Rect::new(top_x + 1, top_y + 2, f.area().width, f.area().height),
     );
-
-    let buf = Text::from(app.buf.clone());
-    f.render_widget(buf, Rect::new(1, 4, f.area().width, f.area().height));
 }
