@@ -13,7 +13,7 @@ pub struct App {
     pub staged_signal: Option<Signal>,
     pub signals: Vec<Signal>,
 
-    pub render_case: RenderCase,
+    render_case: RenderCase,
 
     pub buf: String,
 
@@ -42,10 +42,23 @@ impl App {
         self.latest_char = None;
     }
 
-    pub const fn cycle_render_case(&mut self) {
+    pub fn cycle_render_case(&mut self) {
         self.render_case = match self.render_case {
-            RenderCase::Lowercase => RenderCase::Uppercase,
-            RenderCase::Uppercase => RenderCase::Lowercase,
+            RenderCase::Lowercase => {
+                self.buf = self.buf.to_uppercase();
+                RenderCase::Uppercase
+            }
+            RenderCase::Uppercase => {
+                self.buf = self.buf.to_lowercase();
+                RenderCase::Lowercase
+            }
+        }
+    }
+
+    pub const fn apply_case(&self, c: char) -> char {
+        match self.render_case {
+            RenderCase::Lowercase => c.to_ascii_lowercase(),
+            RenderCase::Uppercase => c.to_ascii_uppercase(),
         }
     }
 
@@ -63,7 +76,7 @@ impl App {
 
         self.latest_char = Some(signals.clone());
 
-        let Some(c) = signals_to_char(&signals) else {
+        let Some(c) = signals_to_char(&signals).map(|c| self.apply_case(c)) else {
             return;
         };
 

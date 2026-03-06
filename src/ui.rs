@@ -11,10 +11,7 @@ pub fn ui(f: &mut Frame, app: &App) {
 
     f.render_widget(block, Rect::new(0, 0, f.area().width, f.area().height));
 
-    let buf = Text::from(match app.render_case {
-        crate::app::RenderCase::Lowercase => app.buf.clone().to_lowercase(),
-        crate::app::RenderCase::Uppercase => app.buf.clone().to_uppercase(),
-    });
+    let buf = Text::from(app.buf.clone());
     f.render_widget(buf, Rect::new(2, f.area().height - 6, f.area().width - 4, f.area().height));
 
     render_input(f, app);
@@ -64,7 +61,7 @@ fn render_input(f: &mut Frame, app: &App) {
 
         let c = signals_to_char(signals);
 
-        let p = format!("{s} => {}", c.unwrap_or('?'));
+        let p = format!("{s} => {}", app.apply_case(c.unwrap_or('?')));
 
         f.render_widget(
             Span::from(p).gray(),
@@ -112,9 +109,6 @@ fn render_debug(f: &mut Frame, app: &App) {
         Rect::new(top_x + 1, top_y + 2, f.area().width, f.area().height),
     );
 
-    let buf = Text::from(match app.render_case {
-        crate::app::RenderCase::Lowercase => app.buf.clone().to_lowercase(),
-        crate::app::RenderCase::Uppercase => app.buf.clone().to_uppercase(),
-    });
+    let buf = Text::from(app.buf.clone());
     f.render_widget(buf, Rect::new(1, 4, f.area().width, f.area().height));
 }
