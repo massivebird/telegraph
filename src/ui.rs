@@ -53,7 +53,7 @@ fn render_input_pane(f: &mut Frame, app: &App) {
             .unwrap_or_default()
             .blue();
 
-        Line::from(vec![prev, staged])
+        Line::from(vec!["> ".into(), prev, staged])
     };
 
     f.render_widget(
@@ -72,7 +72,7 @@ fn render_input_pane(f: &mut Frame, app: &App) {
 
         f.render_widget(
             Span::from(p).gray(),
-            Rect::new(1, top_y + 2, f.area().width, f.area().height),
+            Rect::new(3, top_y + 2, f.area().width, f.area().height),
         );
     }
 }
