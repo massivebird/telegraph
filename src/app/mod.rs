@@ -72,6 +72,8 @@ impl App {
             return;
         }
 
+        self.latest_event = None;
+
         let signals = std::mem::take(&mut self.signals);
 
         self.latest_char = Some(signals.clone());
@@ -81,8 +83,6 @@ impl App {
         };
 
         self.buf.push(c);
-
-        self.latest_event = None;
     }
 
     pub const fn is_pressed(&self) -> bool {
