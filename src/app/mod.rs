@@ -28,8 +28,8 @@ pub struct App {
 #[derive(Copy, Clone, Debug, Default)]
 pub enum RenderCase {
     #[default]
-    Lowercase,
     Uppercase,
+    Lowercase,
 }
 
 impl App {
@@ -60,11 +60,14 @@ impl App {
         }
 
         let signals = std::mem::take(&mut self.signals);
-        let c = signals_to_char(&signals);
 
-        self.latest_char = Some(signals);
+        self.latest_char = Some(signals.clone());
 
-        self.buf.push(c.unwrap_or('?'));
+        let Some(c) = signals_to_char(&signals) else {
+            return;
+        };
+
+        self.buf.push(c);
 
         self.latest_event = None;
     }
