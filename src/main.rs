@@ -86,7 +86,7 @@ fn start_app<B: Backend>(
 /// Handles user input.
 fn handle_events(app: &mut App) -> io::Result<()> {
     if let Event::Key(key) = event::read()? {
-        if key.code == KeyCode::Char(' ') && key.kind == KeyEventKind::Release {
+        if matches!(key.code, KeyCode::Char(' ' | 's')) && key.kind == KeyEventKind::Release {
             app.release();
             return Ok(());
         }
@@ -100,7 +100,7 @@ fn handle_events(app: &mut App) -> io::Result<()> {
             KeyCode::Char('c') => app.cycle_render_case(),
             KeyCode::Char('D') => app.show_debug ^= true,
             KeyCode::Char('L') => app.clear(),
-            KeyCode::Char(' ') => app.press(),
+            KeyCode::Char(' ' | 's') => app.press(),
             _ => (),
         }
     }
