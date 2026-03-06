@@ -1,30 +1,34 @@
-use crate::app::App;
-use crate::app::signal::signals_to_char;
-use ratatui::style::Stylize;
-use ratatui::text::{Line, Span};
-use ratatui::{Frame, layout::Rect, text::Text, widgets::Block};
+use crate::app::{App, signal::signals_to_char};
+use ratatui::{
+    Frame,
+    layout::Rect,
+    style::Stylize,
+    text::{Line, Span, Text},
+    widgets::{Block, Paragraph, Widget},
+};
 
 pub fn ui(f: &mut Frame, app: &App) {
-    let block = Block::bordered()
-        .title_top(" Telegraph ")
-        .title_bottom(" Space: send morse | c: Change case | L: Clear output ");
+    f.render_widget(
+        Block::bordered()
+            .title_top(" Telegraph ")
+            .title_bottom(" Space: send morse | c: Change case | L: Clear output "),
+        Rect::new(0, 0, f.area().width, f.area().height),
+    );
 
-    f.render_widget(block, Rect::new(0, 0, f.area().width, f.area().height));
-
-    let buf = Text::from(app.buf.clone());
+    let buf = Paragraph::new(app.buf.clone()).wrap(ratatui::widgets::Wrap { trim: true });
     f.render_widget(
         buf,
         Rect::new(2, f.area().height - 6, f.area().width - 4, f.area().height),
     );
 
-    render_input(f, app);
+    render_input_pane(f, app);
 
     if app.show_debug {
-        render_debug(f, app);
+        render_debug_pane(f, app);
     }
 }
 
-fn render_input(f: &mut Frame, app: &App) {
+fn render_input_pane(f: &mut Frame, app: &App) {
     let height = 3;
 
     let top_y = f.area().height - height - 1;
@@ -73,16 +77,26 @@ fn render_input(f: &mut Frame, app: &App) {
     }
 }
 
-fn render_debug(f: &mut Frame, app: &App) {
+fn render_debug_pane(f: &mut Frame, app: &App) {
     let width = 19;
     let height = 6;
 
     let top_x = f.area().width - width - 2;
     let top_y = f.area().height - height - 1;
 
-    let block = Block::bordered().title_top(" Debug ").yellow();
-
-    f.render_widget(block, Rect::new(top_x, top_y, width, height));
+    // Render the block, clearing all elements underneath.
+    // https://ratatui.rs/recipes/render/overwrite-regions/
+    {
+        let block_rect = Rect::new(top_x, top_y, width, height);
+        ratatui::widgets::Clear.render(block_rect, f.buffer_mut());
+        f.render_widget(
+            Block::bordered()
+                .title_top(" Debug ")
+                .border_type(ratatui::widgets::BorderType::Double)
+                .yellow(),
+            block_rect,
+        );
+    }
 
     let text = Text::from(if app.is_pressed() { "PRESSED" } else { "" });
     f.render_widget(
