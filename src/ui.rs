@@ -92,6 +92,7 @@ fn render_debug_pane(f: &mut Frame, app: &App) {
         f.render_widget(
             Block::bordered()
                 .title_top(" Debug ")
+                .title_bottom(" D: Hide ")
                 .border_type(ratatui::widgets::BorderType::Double)
                 .yellow(),
             block_rect,
