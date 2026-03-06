@@ -98,6 +98,7 @@ fn handle_events(app: &mut App) -> io::Result<()> {
         match key.code {
             KeyCode::Char('q' | 'Q') => app.close(),
             KeyCode::Char('c') => app.cycle_render_case(),
+            KeyCode::Char('D') => app.show_debug ^= true,
             KeyCode::Char('l') => app.clear(),
             KeyCode::Char(' ') => app.press(),
             _ => (),

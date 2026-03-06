@@ -17,6 +17,8 @@ pub struct App {
 
     pub buf: String,
 
+    pub show_debug: bool,
+
     /// Indicates if the user has begun quitting the app.
     is_closing: bool,
 }
