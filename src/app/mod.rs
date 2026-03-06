@@ -3,7 +3,7 @@ use self::signal::{Signal, signals_to_char};
 
 pub mod cli;
 mod config;
-mod signal;
+pub mod signal;
 
 #[derive(Default)]
 pub struct App {
@@ -17,7 +17,7 @@ pub struct App {
 
     pub buf: String,
 
-    pub latest_char: Option<(Vec<Signal>, Option<char>)>,
+    pub latest_char: Option<Vec<Signal>>,
 
     pub show_debug: bool,
 
@@ -39,6 +39,7 @@ impl App {
 
     pub fn clear(&mut self) {
         self.buf.clear();
+        self.latest_char = None;
     }
 
     pub const fn cycle_render_case(&mut self) {
@@ -61,7 +62,7 @@ impl App {
         let signals = std::mem::take(&mut self.signals);
         let c = signals_to_char(&signals);
 
-        self.latest_char = Some((signals.clone(), c));
+        self.latest_char = Some(signals);
 
         self.buf.push(c.unwrap_or('?'));
 

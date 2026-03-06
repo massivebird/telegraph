@@ -1,4 +1,5 @@
 use crate::app::App;
+use crate::app::signal::signals_to_char;
 use ratatui::style::Stylize;
 use ratatui::text::{Line, Span};
 use ratatui::{Frame, layout::Rect, text::Text, widgets::Block};
@@ -56,13 +57,17 @@ fn render_input(f: &mut Frame, app: &App) {
         Rect::new(1, top_y + 1, f.area().width, f.area().height),
     );
 
-    if let Some((signals, c)) = &app.latest_char {
+    if let Some(signals) = &app.latest_char {
         let s = signals
             .iter()
             .fold(String::new(), |acc, x| acc + &x.to_string());
 
+        let c = signals_to_char(signals);
+
+        let p = format!("{s} => {}", c.unwrap_or('?'));
+
         f.render_widget(
-            Line::from(vec![s.into(), " => ".into(), c.unwrap_or('?').to_string().into()]).gray(),
+            Span::from(p).gray(),
             Rect::new(1, top_y + 2, f.area().width, f.area().height),
         );
     }
