@@ -99,22 +99,23 @@ fn handle_events(app: &mut App) -> io::Result<()> {
         }
 
         match key.code {
+            KeyCode::Char('q' | 'Q') if app.show_reference => app.show_reference = false,
             KeyCode::Char('q' | 'Q') => app.close(),
+            KeyCode::Esc if app.show_reference => app.show_reference = false,
             KeyCode::Char('c') => app.cycle_render_case(),
             KeyCode::Char('D') => app.show_debug ^= true,
             KeyCode::Char('R') if app.staged_signal.is_none() && app.signals.is_empty() => {
                 app.show_reference ^= true;
                 app.scroll = 0;
-                app.ref_scrollbar_state = ratatui::widgets::ScrollbarState::new(36);
             }
             KeyCode::Char('j') if app.show_reference => {
                 app.scroll = app.scroll.saturating_add(1);
                 app.ref_scrollbar_state = app.ref_scrollbar_state.position(app.scroll.into());
-            },
+            }
             KeyCode::Char('k') if app.show_reference => {
                 app.scroll = app.scroll.saturating_sub(1);
                 app.ref_scrollbar_state = app.ref_scrollbar_state.position(app.scroll.into());
-            },
+            }
             KeyCode::Char('L') => app.clear(),
             KeyCode::Char(' ' | 's') if !app.show_reference => app.press(),
             _ => (),
