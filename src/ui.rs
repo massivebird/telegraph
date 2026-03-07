@@ -20,7 +20,7 @@ pub fn ui(f: &mut Frame, app: &mut App) {
         Rect::new(0, 0, f.area().width, f.area().height),
     );
 
-    let buf = Paragraph::new(app.buf.clone()).wrap(ratatui::widgets::Wrap { trim: true });
+    let buf = Paragraph::new(app.buf.clone() + "▎").wrap(ratatui::widgets::Wrap { trim: true });
     f.render_widget(
         buf,
         Rect::new(2, f.area().height - 6, f.area().width - 4, f.area().height),
