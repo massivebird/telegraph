@@ -1,5 +1,7 @@
 use std::time::Duration;
 
+use ratatui::widgets::ScrollbarState;
+
 use self::cli::generate_matches;
 use self::signal::{Signal, signals_to_char};
 
@@ -22,6 +24,10 @@ pub struct App {
     pub latest_char: Option<Vec<Signal>>,
 
     pub show_debug: bool,
+
+    pub show_reference: bool,
+    pub scroll: u16,
+    pub ref_scrollbar_state: ScrollbarState,
 
     /// Indicates if the user has begun quitting the app.
     is_closing: bool,

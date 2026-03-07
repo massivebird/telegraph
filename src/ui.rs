@@ -1,13 +1,18 @@
-use crate::app::{App, signal::signals_to_char};
+use std::io::Write;
+
+use crate::app::{
+    App,
+    signal::{signals_to_char, signals_to_str},
+};
 use ratatui::{
     Frame,
-    layout::Rect,
+    layout::{Margin, Rect},
     style::Stylize,
     text::{Line, Span, Text},
-    widgets::{Block, Paragraph, Widget},
+    widgets::{Block, Paragraph, Scrollbar, ScrollbarOrientation, Widget},
 };
 
-pub fn ui(f: &mut Frame, app: &App) {
+pub fn ui(f: &mut Frame, app: &mut App) {
     f.render_widget(
         Block::bordered()
             .title_top(" Telegraph ")
@@ -25,6 +30,10 @@ pub fn ui(f: &mut Frame, app: &App) {
 
     if app.show_debug {
         render_debug_pane(f, app);
+    }
+
+    if app.show_reference {
+        render_reference_pane(f, app);
     }
 }
 
@@ -125,5 +134,53 @@ fn render_debug_pane(f: &mut Frame, app: &App) {
     f.render_widget(
         symbol,
         Rect::new(top_x + 1, top_y + 2, f.area().width, f.area().height),
+    );
+}
+
+fn render_reference_pane(f: &mut Frame, app: &mut App) {
+    let height = f.area().height - 4;
+
+    let pane_rect = f
+        .area()
+        .centered_vertically(ratatui::layout::Constraint::Max(height))
+        .centered_horizontally(ratatui::layout::Constraint::Length(20));
+
+    {
+        ratatui::widgets::Clear.render(pane_rect, f.buffer_mut());
+        f.render_widget(
+            Block::bordered()
+                .title_top(" Reference ")
+                .title_alignment(ratatui::layout::HorizontalAlignment::Center)
+                .title_bottom(" R: Hide "),
+            pane_rect,
+        );
+    }
+
+    let mut buf: Vec<u8> = Vec::new();
+
+    for c in 'a'..='z' {
+        let signals_str = signals_to_str(&crate::app::signal::char_to_signals(c).unwrap());
+        writeln!(&mut buf, "{c} => {signals_str}").unwrap();
+    }
+
+    let content = String::from_utf8(buf).unwrap();
+    let lines = content.lines().count();
+    let vis = lines.saturating_sub(height as usize - 2);
+    app.ref_scrollbar_state = app.ref_scrollbar_state.content_length(vis);
+
+    app.scroll = app.scroll.min(vis as u16);
+
+    let p = Paragraph::new(content).scroll((app.scroll, 0));
+
+    f.render_widget(p, pane_rect.inner(Margin::new(1, 1)));
+
+    f.render_stateful_widget(
+        Scrollbar::new(ScrollbarOrientation::VerticalRight)
+            .symbols(ratatui::symbols::scrollbar::VERTICAL)
+            .begin_symbol(None)
+            .track_symbol(None)
+            .end_symbol(None),
+        pane_rect.inner(Margin::new(0, 1)),
+        &mut app.ref_scrollbar_state,
     );
 }
