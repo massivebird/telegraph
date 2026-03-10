@@ -25,8 +25,6 @@
           mkShell {
             buildInputs = [
               cargo
-              openssl
-              pkg-config
               clippy
               rust-analyzer
               rustc
