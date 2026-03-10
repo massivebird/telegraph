@@ -1,5 +1,5 @@
 {
-  description = "Is it online or what";
+  description = "Morse code my man";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
